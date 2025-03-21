@@ -1,3 +1,3 @@
-# Twitch Draw
+# Somroti's Project
 
-Draw with your Twitch chat!
+Find all my project here!
