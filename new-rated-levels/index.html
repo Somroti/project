@@ -174,9 +174,10 @@
         
         // Patch pour assurer que la configuration minimale est présente si elle manque complètement
         if (!firebaseConfig.projectId) {
-            console.warn("ATTENTION: projectId manquant. Utilisation d'une configuration de secours.");
+            console.warn("ATTENTION: Configuration Firebase incomplète. Utilisation de l'App ID comme Project ID de secours.");
             firebaseConfig = {
-                apiKey: firebaseConfig.apiKey || "AIzaSy_DEFAULT_API_KEY", 
+                // FIX CRITIQUE: Laisse la clé API vide au lieu d'une fausse clé pour éviter l'erreur (auth/api-key-not-valid)
+                apiKey: firebaseConfig.apiKey || "", 
                 authDomain: firebaseConfig.authDomain || `${appId}.firebaseapp.com`,
                 projectId: appId, // Utilisation de l'App ID comme Project ID de secours
                 storageBucket: firebaseConfig.storageBucket || `${appId}.appspot.com`,
@@ -274,9 +275,9 @@
                 auth = getAuth(app);
                 
                 // Si la configuration était un "patch" (projectId était vide), on affiche un avertissement
-                if (firebaseConfig.projectId === appId && typeof __firebase_config === 'undefined') {
+                if (firebaseConfig.projectId === appId && firebaseConfig.apiKey === "" && typeof __firebase_config === 'undefined') {
                     showModal("Avertissement", 
-                        "La configuration Firebase était incomplète. J'ai injecté des valeurs par défaut pour permettre à l'application de démarrer. Si vous voyez des erreurs de permission, cela signifie que la plateforme doit fournir la configuration correcte."
+                        "La configuration Firebase était incomplète. J'ai injecté des valeurs par défaut minimales pour permettre à l'application de démarrer."
                     );
                 }
 
